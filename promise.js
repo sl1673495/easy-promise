@@ -23,8 +23,6 @@ function EasyPromise(fn) {
     reject(e)
   }
 
-
-
   function resolve(value) {
     if (value instanceof EasyPromise) {
       return value.then(resolve, reject)
@@ -65,6 +63,8 @@ EasyPromise.prototype.then = function (onFulfilled, onRejected) {
     return (promise2 = new EasyPromise((resolve, reject) => {
       that.resolvedCallbacks.push(() => {
         try {
+          // 在这个时候 that.value已经有值了 
+          // 因为上一个promise已经被resolve过了
           const x = onFulfilled(that.value)
           resolutionProcedure(promise2, x, resolve, reject)
         } catch (e) {
